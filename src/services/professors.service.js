@@ -3,8 +3,11 @@ export default class ProfessorsService {
     constructor(){
         axios.defaults.baseURL = 'http://localhost:8000/api'
     }
-    getAll(){        
-        return axios.get('professors');
+    getAll(onlyUnsignedProfessor){
+        if (!onlyUnsignedProfessor)
+            return axios.get('professors')
+        else 
+            return axios.get('professors/onlyUnsignedProfessors');
     }
     getProfessor(id){
         return axios.get('professors/'+id);

@@ -6,5 +6,8 @@ export default class GradebooksService {
     getAll(){        
         return axios.get('gradebooks');
     }
+    add(gradebook){
+        return axios.post('gradebooks/create', gradebook);
+    }
 }
 export const gradebooksService = new GradebooksService()
