@@ -23,7 +23,7 @@ export const AuthModule = {
                 });
         },
         logout(context){
-            context.commit('setUser', null)
+            context.commit('setUser', null)            
             return authService.logout()
         }
     },

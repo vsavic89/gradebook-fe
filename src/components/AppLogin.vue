@@ -1,17 +1,15 @@
 <template>
-    <div>
-        <h1>Please login...</h1>
-        <form method="POST" @submit.prevent="login">
-            <div>
-                <label for="email">Email: </label>
-                <input type="email" name="email" v-model="email"/>
+    <div>    
+        <form class="text-center border border-light p-5" method="POST" @submit.prevent="submitForm">
+            <p class="h4 mb-4">Sign in</p>
+                    <input maxlength="255" class="form-control mb-4" type="email" name="email" v-model="email" placeholder="E-mail" required/>
+            <div class="form-group">
+                <div>
+                    <input maxlength="255" class="form-control mb-4" type="password" name="password" v-model="password" placeholder="Password" required/>
+                </div>                    
             </div>
-            <div>
-                <label for="password">Password: </label>
-                <input type="password" name="password" v-model="password"/>
-            </div>
-            <button class="btn btn-primary" type="submit">Login</button>
-        </form>
+            <button class="btn btn-info btn-block my-4" type="submit">Log In</button>
+        </form>      
     </div>
 </template>
 
@@ -26,13 +24,17 @@ export default {
         }
     },
     methods: {
-        login(){
-            authService.login(this.email, this.password)
-                .then(response => {
-                    this.$router.push('/')
-                }).catch(e => {
-                    console.log(e)
-                })
+      ...mapActions({
+        login: 'login'
+      }),
+        submitForm(){
+            this.login(
+            {
+                email: this.email,
+                password: this.password
+            }).then(() => {
+                this.$router.push('/')
+            })           
         }
     }
 }

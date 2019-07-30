@@ -1,32 +1,17 @@
 <template>
-    <div>
-        <h1>Please register...</h1>
-        <form method="POST" @submit.prevent="register">
-            <div>
-                <label for="firstName">First Name: </label>
-                <input type="text" name="first_name" v-model="user.first_name" required/>
+    <div>        
+        <form class="text-center border border-light p-5" method="POST" @submit.prevent="register">            
+            <p class="h4 mb-4">Sign up</p>
+            <input maxlength="255" class="form-control mb-4" placeholder="First Name" type="text" name="first_name" v-model="user.first_name" required/>        
+            <input maxlength="255" class="form-control mb-4" placeholder="Last Name" type="text" name="last_name" v-model="user.last_name" required/>            
+            <input maxlength="255" class="form-control mb-4" placeholder="E-mail" type="email" name="email" v-model="user.email" required/>            
+            <input minlength="8" class="form-control mb-4" placeholder="Password" type="password" name="password" v-model="user.password" required/>                                    
+            <input minlength="8" class="form-control mb-4" placeholder="Confirm Password" type="password" name="password_confirmation" v-model="user.password_confirmation" required/>        
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="termsAndConditions" v-model="user.acceptedTermsAndCondition" required>
+                <label class="custom-control-label" for="termsAndConditions">I accept terms and conditions</label>
             </div>
-            <div>
-                <label for="lastName">Last Name: </label>
-                <input type="text" name="last_name" v-model="user.last_name" required/>
-            </div>
-            <div>
-                <label for="email">Email: </label>
-                <input type="email" name="email" v-model="user.email" required/>
-            </div>
-            <div>
-                <label for="password">Password: </label>
-                <input type="password" name="password" v-model="user.password" required/>
-            </div>
-            <div>
-                <label for="passwordConfirmation">Confirm Password: </label>
-                <input type="password" name="password_confirmation" v-model="user.password_confirmation" required/>
-            </div>
-            <div>
-                <label for="termsAndConditions">I accept terms and conditions </label>
-                <input type="checkbox" name="termsAndConditions" v-model="user.acceptedTermsAndCondition" required/>
-            </div>
-            <button type="submit">Register</button>
+            <button class="btn btn-info btn-block my-4" type="submit">Register</button>                        
         </form>
     </div>
 </template>

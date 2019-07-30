@@ -2,8 +2,8 @@ import axios from 'axios'
 
 export default class AuthService {
   constructor() {
-    //this.setAxiosDefaultAuthorizationHeader();
-    axios.defaults.baseURL = 'http://localhost:8000/api'
+    this.setAxiosDefaultAuthorizationHeader();
+    // axios.defaults.baseURL = 'http://localhost:8000/api'
   }
   login(email, password) {
     return axios.post('/login', {
@@ -30,7 +30,7 @@ export default class AuthService {
   }
 
   isAuthenticated() {
-    return !!window.localStorage.getItem('loginToken') //ne sme biti null i undefined...
+    return !!window.localStorage.getItem('loginToken') 
   }
   register(newUser){
     return axios.post('/register', newUser);
