@@ -2,18 +2,20 @@
   <div id="app">
      <header>
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="#">Online Gradebook</a>
+        <a class="navbar-brand" href="/">Online Gradebook</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item">                                       
-              <router-link class="nav-link" to="/gradebooks">Gradebooks</router-link>                
-            </li>
+            <div v-if="user">  
+              <li class="nav-item">                                       
+                <router-link class="nav-link" to="/gradebooks">Gradebooks</router-link>                
+              </li>
+            </div>
             <div v-if="user">  
               <li class="nav-item">                              
-                  <router-link class="nav-link" to="/teachers">All Professors</router-link>                                  
+                  <router-link class="nav-link" to="/professors">All Professors</router-link>                                  
               </li>
             </div>
             <div v-if="user">

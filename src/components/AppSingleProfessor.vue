@@ -1,0 +1,37 @@
+<template>
+    <div>
+        <h2>Professor info</h2>
+        <ul>
+            <li><img width="100" height="100" :src="professor.imageUrl"/></li>
+            <li>Fullname: {{ professor.first_name + ' ' + professor.last_name }}</li>  
+            <li v-if="professor.gradebook_name">Gradebook name: {{ professor.gradebook_name }}</li>          
+            <li v-else>Gradebook name: undefined</li>
+        </ul>
+    </div>
+</template>
+
+<script>
+import { professorsService } from '../services/professors.service';
+export default {
+    data(){
+        return {
+            professor: undefined,
+            professorID: undefined
+        }
+    },
+    created(){
+        this.professorID = this.$router.currentRoute.params.id;
+        professorsService.getProfessor(this.professorID)
+            .then(response => {
+                this.professor = response.data[0];
+            }).catch(e => {
+                console.log(e);
+            })
+
+    }
+}
+</script>
+
+<style>
+
+</style>

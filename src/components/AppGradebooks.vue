@@ -1,9 +1,13 @@
 <template>
     <div>
         <h2>A list of gradebooks</h2>
-        <div v-if="gradebooks.length > 0">      
-                <ul>
-                    <li v-for="(gradebook, index) in gradebooks" :key="index">
+        <div v-if="gradebooks.length > 0">     
+            <div class="form-group">
+                <label for="filter">Search Term: </label>
+                <input type="text" name="filter" v-model="searchTerm" />
+            </div>
+                    <ul>
+                    <li v-for="(gradebook, index) in filteredGradebooks" :key="index">
                         <strong><p>Gradebook name: <button @click="goToGradebook(gradebook.id)">{{ gradebook.name }}</button></p></strong>
                         <p>Number of students: {{ gradebook.numberOfStudents }}</p>                                                                   
                         <p v-if="gradebook.professor_id">
@@ -27,7 +31,8 @@ import { gradebooksService } from '../services/gradebooks.service';
 export default {
     data(){
         return {
-            gradebooks: []
+            gradebooks: [],
+            searchTerm: ''
         }
     },
     created(){
@@ -39,12 +44,17 @@ export default {
                 //this.errors.push(e)
             })
     },
+    computed: {
+        filteredGradebooks(){
+            return this.gradebooks.filter(gradebook => gradebook.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
+        }
+    },
     methods: {
         goToGradebook(id){
             return this.$router.push('/gradebooks/'+id);
         },
         goToTeacher(id){
-            return this.$router.push('/teachers/'+id);
+            return this.$router.push('/professors/'+id);
         }
     }
 }
