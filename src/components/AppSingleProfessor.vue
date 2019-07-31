@@ -15,20 +15,19 @@ import { professorsService } from '../services/professors.service';
 export default {
     data(){
         return {
-            professor: undefined,
-            professorID: undefined
+            professor: {},            
         }
     },
     created(){
-        this.professorID = this.$router.currentRoute.params.id;
-        professorsService.getProfessor(this.professorID)
+        let professorID = this.$router.currentRoute.params.id;
+        professorsService.getProfessor(professorID)
             .then(response => {
                 this.professor = response.data[0];
             }).catch(e => {
                 console.log(e);
             })
 
-    }
+    },
 }
 </script>
 

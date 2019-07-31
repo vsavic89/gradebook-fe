@@ -12,5 +12,8 @@ export default class ProfessorsService {
     getProfessor(id){
         return axios.get('professors/'+id);
     }
+    addProfessor(newProfessor){
+        return axios.post('professors/create',newProfessor);
+    }
 }
 export const professorsService = new ProfessorsService()

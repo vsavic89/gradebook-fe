@@ -1,9 +1,9 @@
 <template>
     <div>
         <h2>A list of professors</h2>
-        <div v-if="filteredProfessors.length > 0">
         <label for="filter">Filter: </label>
-        <input type="text" name="filter" v-model="searchTerm" />
+        <input type="text" name="filter" v-model="searchTerm" />        
+        <div v-if="filteredProfessors.length > 0">    
         <table border="1" align="center">
             <tr>
                 <th>Picture</th>

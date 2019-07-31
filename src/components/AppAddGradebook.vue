@@ -36,7 +36,7 @@ export default {
         cancel(){
             this.$router.push('/gradebooks');
         },
-        addGradebook(){
+        addGradebook(){            
             gradebooksService.add(this.newGradebook)
                 .then(response => {
                     this.$router.push('/gradebooks')
