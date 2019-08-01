@@ -7,7 +7,7 @@ export default class ProfessorsService {
         if (!onlyUnsignedProfessor)
             return axios.get('professors')
         else 
-            return axios.get('professors/onlyUnsignedProfessors');
+            return axios.get('professors?onlyUnsignedProfessors=true');
     }
     getProfessor(id){
         return axios.get('professors/'+id);

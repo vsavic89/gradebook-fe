@@ -6,11 +6,17 @@ export default class GradebooksService {
     getAll(){        
         return axios.get('gradebooks');
     }
+    getGradebook(id){        
+        return axios.get('gradebooks/'+id);
+    }
     add(gradebook){
         return axios.post('gradebooks/create', gradebook);
     }
-    getGradebook(professorID){
-        return axios.get('gradebooks/professors/'+professorID)
+    getGradebookByProfessorID(professorID){
+        return axios.get('gradebooks/%?professorID='+professorID)
+    }
+    deleteGradebook(id){
+        return axios.delete('gradebooks/' + id);
     }
 }
 export const gradebooksService = new GradebooksService()

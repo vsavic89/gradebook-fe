@@ -9,7 +9,7 @@
                     <ul>
                     <li v-for="(gradebook, index) in filteredGradebooks" :key="index">
                         <strong><p>Gradebook name: <button @click="goToGradebook(gradebook.id)">{{ gradebook.name }}</button></p></strong>
-                        <p>Number of students: {{ gradebook.numberOfStudents }}</p>                                                                   
+                        <!-- <p>Number of students: {{ gradebook.numberOfStudents }}</p>                                                                    -->
                         <p v-if="gradebook.professor_id">
                             Professor fullname: <button @click="goToTeacher(gradebook.professor_id)">{{ gradebook.first_name + ' ' + gradebook.last_name }}</button>
                         </p>

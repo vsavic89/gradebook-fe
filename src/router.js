@@ -6,8 +6,9 @@ import AppGradebooks from './components/AppGradebooks'
 import AppProfessors from './components/AppProfessors'
 import AppSingleProfessor from './components/AppSingleProfessor'
 import AppAddGradebook from './components/AppAddGradebook'
-import AppAddProfessor from './components/AppAddProfessor'
+import AddProfessor from './components/AddProfessor'
 import MyGradebook from './components/MyGradebook'
+import AddStudent from './components/AddStudent'
 
 Vue.use(Router)
 
@@ -42,7 +43,17 @@ export default new Router({
     {
       path: '/professors/create',
       name: 'professors-create',
-      component: AppAddProfessor
+      component: AddProfessor
+    },   
+    {
+      path: '/my-gradebook',
+      name: 'my-gradebook',
+      component: MyGradebook
+    },
+    {
+      path: '/gradebooks/:id',
+      name: 'gradebook-id',
+      component: MyGradebook
     },
     {
       path: '/professors/:id',
@@ -50,9 +61,14 @@ export default new Router({
       component: AppSingleProfessor
     },
     {
-      path: '/my-gradebook',
-      name: 'my-gradebook',
-      component: MyGradebook
+      path: '/gradebooks/:id/students/create',
+      name: 'students-create',
+      component: AddStudent
+    },
+    {
+      path: '/gradebooks/:id/edit',
+      name: 'students-edit',
+      component: AddStudent
     }
   ]
 })
