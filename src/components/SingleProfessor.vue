@@ -7,6 +7,11 @@
             <li v-if="professor.gradebook_name">Gradebook name: {{ professor.gradebook_name }}</li>          
             <li v-else>Gradebook name: undefined</li>
         </ul>
+        <div v-if="errors.length > 0">
+            <p v-for="(error, index) in errors" :key="index">
+                {{ error }}
+            </p>
+        </div>
     </div>
 </template>
 
@@ -15,7 +20,8 @@ import { professorsService } from '../services/professors.service';
 export default {
     data(){
         return {
-            professor: {},            
+            professor: {},  
+            errors: []          
         }
     },
     created(){
@@ -24,7 +30,7 @@ export default {
             .then(response => {
                 this.professor = response.data[0];
             }).catch(e => {
-                console.log(e);
+                this.errors.push(e)
             })
 
     },

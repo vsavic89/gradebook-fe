@@ -16,6 +16,13 @@
             </div>
         </form>
         <button @click="cancel">Cancel</button>
+
+        <div v-if="errors.length > 0">
+            <p v-for="(error, index) in errors" :key="index">
+                {{ error }}
+            </p>
+        </div>
+
     </div>
 </template>
 
@@ -29,7 +36,8 @@ export default {
                 name: '',
                 professor_id: undefined
             },
-            professors: []
+            professors: [],
+            errors: []
         }
     },
     methods: {
@@ -41,7 +49,7 @@ export default {
                 .then(response => {
                     this.$router.push('/gradebooks')
                 }).catch(e => {
-                    console.log(e)
+                    this.errors.push(e);
                 })
         },
     },
@@ -50,7 +58,7 @@ export default {
         .then(response => {
             this.professors = response.data;
         }).catch(e => {
-            console.log(e)
+            this.errors.push(e);
         })
     }
 }

@@ -8,11 +8,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
-            <div v-if="user">  
-              <li class="nav-item">                                       
-                <router-link class="nav-link" to="/gradebooks">Gradebooks</router-link>                
-              </li>
-            </div>
+            <li class="nav-item">                                       
+              <router-link class="nav-link" to="/gradebooks">Gradebooks</router-link>                
+            </li>
             <div v-if="user">  
               <li class="nav-item">                              
                   <router-link class="nav-link" to="/professors">All Professors</router-link>                                  
@@ -39,7 +37,7 @@
                 <router-link class="nav-link btn btn-outline-primary my-2 my-sm-0 mr-sm-2" to="/login">Login</router-link>                                  
             </div>
             <div v-else>                
-                <router-link class="nav-link btn btn-outline-success my-2 my-sm-0" to="/logout"><a class="underline-remove" @click="logoutUser()">Logout</a></router-link>
+                <router-link class="nav-link btn btn-outline-success my-2 my-sm-0" to="/logout" @click="logoutUser()"><a class="underline-remove" @click="logoutUser()">Logout</a></router-link>
             </div>
           <div v-if="!user">
               <router-link class="nav-link btn btn-outline-danger my-2 my-sm-0" to="/register">Register</router-link>

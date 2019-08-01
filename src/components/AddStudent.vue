@@ -22,8 +22,10 @@
     <div v-if="allNewStudents.length > 0">
       <button class="btn btn-primary" @click="addStudents">Submit New Students</button>    
     </div>          
-    <div v-for="(error, index) in errors" :key="index">
-      {{ error }}
+    <div v-if="errors.length > 0">
+        <p v-for="(error, index) in errors" :key="index">
+            {{ error }}
+        </p>
     </div>
   </div>
 </template>

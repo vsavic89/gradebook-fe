@@ -27,6 +27,11 @@
         <div v-else>            
             <h3>Sorry, no professors to show, please add one.</h3>
         </div>
+        <div v-if="errors.length > 0">
+            <p v-for="(error, index) in errors" :key="index">
+                {{ error }}
+            </p>
+        </div>
     </div>
 </template>
 
@@ -36,7 +41,8 @@ export default {
     data(){
         return {
             professors: [],
-            searchTerm: ''
+            searchTerm: '',
+            errors: []
         }
     },
     computed: {
@@ -53,7 +59,7 @@ export default {
             .then(response => {
                 this.professors = response.data;
             }).catch(e => {
-                console.log(e);
+                this.errors.push(e)
             })
     },
     methods: {

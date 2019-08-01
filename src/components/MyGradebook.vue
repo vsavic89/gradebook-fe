@@ -1,13 +1,23 @@
 <template>
-    <div>
-        <h2>My Gradebook</h2>  
+    <div>  
         <div v-if="gradebookItemsList.length > 0">
-            <button class="btn btn-danger" @click="deleteGradebook(gradebookItemsList[0].id)">Delete Gradebook</button>
-            <button class="btn btn-secondary" @click="editGradebook(gradebookItemsList[0].id)">Edit Gradebook</button>
+            <h2 v-if="routeName==='my-gradebook'">My Gradebook</h2>
+            <h2>Gradebook name: {{ gradebookItemsList[0].name }}</h2>
+            <div v-if="user">
+                <button class="btn btn-danger" @click="deleteGradebook(gradebookID)">Delete Gradebook</button>
+                <button class="btn btn-secondary" @click="editGradebook(gradebookID)">Edit Gradebook</button>
+            </div>
             <br><br>
-            Professor: <strong>{{gradebookItemsList[0].first_name + ' ' + gradebookItemsList[0].last_name}}</strong>            
-            <div>
+            <div v-if="gradebookItemsList[0].first_name">
+                Professor: <strong>{{gradebookItemsList[0].first_name + ' ' + gradebookItemsList[0].last_name}}</strong>
+            </div>
+            <div v-else>
+                Professor not assigned for this gradebook.
+            </div>            
+            <div v-if="user">
                 <button @click="addStudents">Add Students</button>
+            </div>
+                <div>
                 <h3>Students list</h3>                
                 <div v-if="gradebookItemsList[0].studentFirstName">
                     <table border="1" align="center">
@@ -16,7 +26,7 @@
                             <th>First name</th>
                             <th>Last name</th>
                         </tr>                        
-                        <tr v-for="(student, index) in gradebookItemsList" :key="index">                        
+                        <tr v-for="(student, index) in gradebookItemsList" :key="index">                       
                             <td><img width="100" height="100" :src="student.studentImageURL"/></td>
                             <td>{{ student.studentFirstName }}</td>
                             <td>{{ student.studentLastName }}</td>                            
@@ -27,7 +37,7 @@
                     <p>No students to show.</p>
                 </div>               
             </div>        
-            <div v-if="commentsList.length >= 0">
+            <div v-if="commentsList.length > 0">
                 <h3>Comments:</h3>                
                 <div v-for="(comment, index) in commentsList" :key="index">
                     <div v-if="comment">                
@@ -35,7 +45,6 @@
                         Created at: <p>{{ comment.created_at }}</p>
                         Content: <p>{{ comment.content }}</p>
                         <div v-if="user && (user.id === comment.user_id)">
-                            <!-- <button class="btn btn-secondary" @click="editComment(index)">Edit Comment</button>                 -->
                             <button class="btn btn-danger" @click="deleteComment(index)">Delete Comment</button>               
                         </div> 
                     </div>            
@@ -50,6 +59,11 @@
         </div>    
         <div v-else>
             <p>No gradebook to show.</p>            
+        </div>
+        <div v-if="errors.length > 0">
+            <p v-for="(error, index) in errors" :key="index">
+                {{ error }}
+            </p>
         </div>
     </div>
 </template>
@@ -76,7 +90,7 @@ export default {
         }
     },
     created(){  
-        this.routeName = this.$router.currentRoute.name;        
+        this.routeName = this.$router.currentRoute.name;      
         if (this.routeName === 'my-gradebook'){
             gradebooksService.getGradebookByProfessorID(this.user.id)
                 .then(response => {
@@ -90,8 +104,7 @@ export default {
             this.gradebookID = this.$router.currentRoute.params.id;
             gradebooksService.getGradebook(this.gradebookID)
                 .then(response => {
-                    this.gradebook = response.data;                    
-                    this.gradebookID = this.gradebook[0].id;
+                    this.gradebook = response.data;                 
                     this.getComments(); 
                 }).catch(e => {
                     this.errors.push(e);
@@ -103,7 +116,7 @@ export default {
             user: "getUser"
         }),
         gradebookItemsList(){
-            return this.gradebook;
+            return this.gradebook.filter(g => g.studentFirstName !== undefined);
         },
         commentsList(){
             return this.comments;
@@ -113,7 +126,7 @@ export default {
         getComments(){
             commentsService.getComments(this.gradebookID)
                 .then(response => {
-                    this.comments = response.data;                
+                    this.comments = response.data;               
                 }).catch(e => {
                     this.errors.push(e);
                 });

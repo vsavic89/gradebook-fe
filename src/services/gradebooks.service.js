@@ -3,8 +3,8 @@ export default class GradebooksService {
     constructor(){
         axios.defaults.baseURL = 'http://localhost:8000/api'
     }
-    getAll(){        
-        return axios.get('gradebooks');
+    getAll(currentPage, rowsPerPage){        
+        return axios.get('gradebooks?current_page='+currentPage+'&rows_per_page='+rowsPerPage);
     }
     getGradebook(id){        
         return axios.get('gradebooks/'+id);
