@@ -27,7 +27,7 @@
                     <td v-else>
                         No professor for this gradebook
                     </td>
-                    <td>{{ gradebook.created_at }}</td>                    
+                    <td>{{ formatDate(gradebook.created_at, 'dddd, MMMM Do YYYY') }}</td>                    
                 </tr>
             </table>
             <div v-if="showMoreVisible">
@@ -47,7 +47,11 @@
 import { gradebooksService } from '../services/gradebooks.service';
 import { mapGetters } from "vuex";
 import ErrorsHandler from './ErrorsHandler';
+import { dateMixin } from '../mixins/mixins';
 export default {
+    mixins: [
+        dateMixin
+    ],
     components: {
       ErrorsHandler
     },

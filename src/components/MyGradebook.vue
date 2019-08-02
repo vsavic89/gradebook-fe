@@ -42,7 +42,7 @@
                 <div v-for="(comment, index) in commentsList" :key="index">
                     <div v-if="comment">                
                         Author name: <h4>{{ comment.first_name + ' ' + comment.last_name }}</h4>
-                        Created at: <p>{{ comment.created_at }}</p>
+                        Created at: <p>{{ diffForHumans(comment.created_at) }}</p>
                         Content: <p>{{ comment.content }}</p>
                         <div v-if="user && (user.id === comment.user_id)">
                             <button class="btn btn-danger" @click="deleteComment(index)">Delete Comment</button>               
@@ -71,7 +71,11 @@ import { gradebooksService } from '../services/gradebooks.service';
 import { commentsService } from '../services/comments.service';
 import { mapGetters } from "vuex";
 import ErrorsHandler from './ErrorsHandler';
+import { dateMixin } from '../mixins/mixins';
 export default {
+    mixins: [
+        dateMixin
+    ],
     components: {
       ErrorsHandler
     },
