@@ -1,8 +1,8 @@
 <template>
     <div>
         <h2>A list of professors</h2>
-        <label for="filter">Filter: </label>
-        <input type="text" name="filter" v-model="searchTerm" />        
+        <label for="filter">Find professors by fullname: </label>
+        <input type="text" name="filter" v-model="searchTerm" placeholder="(type here)"/>        
         <div v-if="filteredProfessors.length > 0">    
         <table border="1" align="center">
             <tr>

@@ -50,7 +50,12 @@
         </div>
       </nav>     
     </header>
-    <router-view/>
+    <main role="main">    
+      <router-view/>
+    </main>
+    <footer class="container">      
+        <p>&copy; 2019 Vladimir Savic</p>
+    </footer>
   </div>
 </template>
 <script>

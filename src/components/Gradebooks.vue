@@ -3,8 +3,8 @@
         <h2>A list of gradebooks</h2>
         <div v-if="gradebooks.length > 0">     
             <div class="form-group">
-                <label for="filter">Search Term: </label>
-                <input type="text" name="filter" v-model="searchTerm" />
+                <label for="filter">Find gradebook by name: </label>
+                <input type="text" name="filter" v-model="searchTerm" placeholder="(type here)"/>
             </div>
             <table border="1" width="100%">
                 <tr>
