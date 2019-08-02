@@ -1,5 +1,6 @@
 <template>
     <div>        
+        <div v-if="!user">
         <form class="text-center border border-light p-5" method="POST" @submit.prevent="register">            
             <p class="h4 mb-4">Sign up</p>
             <input maxlength="255" class="form-control mb-4" placeholder="First Name" type="text" name="first_name" v-model="user.first_name" required/>        
@@ -15,13 +16,18 @@
         </form>
         <errors-handler 
             :errors="showErrors"
-        />        
+        />      
+        </div>
+        <div v-else>
+            <h1>Restricted access, please log out.</h1>
+        </div>  
     </div>
 </template>
 
 <script>
 import { authService } from '../services/Auth'
 import ErrorsHandler from './ErrorsHandler';
+import { mapGetters } from "vuex";
 export default {
     components: {
         ErrorsHandler
@@ -57,7 +63,10 @@ export default {
     computed: {
         showErrors(){
             return this.errors;
-        }
+        },
+        ...mapGetters({
+            user: "getUser"
+        }),
     }
 }
 </script>

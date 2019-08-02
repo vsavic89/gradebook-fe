@@ -1,24 +1,29 @@
 <template>
-    <div>    
-        <form class="text-center border border-light p-5" method="POST" @submit.prevent="submitForm">
-            <p class="h4 mb-4">Sign in</p>
-                    <input maxlength="255" class="form-control mb-4" type="email" name="email" v-model="email" placeholder="E-mail" required/>
-            <div class="form-group">
-                <div>
-                    <input maxlength="255" class="form-control mb-4" type="password" name="password" v-model="password" placeholder="Password" required/>
-                </div>                    
-            </div>
-            <button class="btn btn-info btn-block my-4" type="submit">Log In</button>
-        </form> 
-         <errors-handler 
-            :errors="showErrors"
-        />
+    <div> 
+        <div v-if="!user">   
+            <form class="text-center border border-light p-5" method="POST" @submit.prevent="submitForm">
+                <p class="h4 mb-4">Sign in</p>
+                        <input maxlength="255" class="form-control mb-4" type="email" name="email" v-model="email" placeholder="E-mail" required/>
+                <div class="form-group">
+                    <div>
+                        <input maxlength="255" class="form-control mb-4" type="password" name="password" v-model="password" placeholder="Password" required/>
+                    </div>                    
+                </div>
+                <button class="btn btn-info btn-block my-4" type="submit">Log In</button>
+            </form> 
+            <errors-handler 
+                :errors="showErrors"
+            />
+        </div>
+        <div v-else>
+            <h1>Restricted access, please log out.</h1>
+        </div>
     </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
-import { authService } from '../services/Auth';
+import { mapGetters } from "vuex";
 import ErrorsHandler from './ErrorsHandler';
 export default {
     components: {
@@ -51,13 +56,11 @@ export default {
     computed: {
         showErrors(){
             return this.errors;
-        }
-    }
-//     beforeRouteEnter(to, from, next) {
-//         next(vm => {
-//         vm.prevRoute = from      
-//         })
-//     }
+        },
+        ...mapGetters({
+            user: "getUser"
+        }),
+    },
 }
 </script>
 

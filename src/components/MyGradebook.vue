@@ -137,7 +137,7 @@ export default {
     },
     methods: {
         getComments(){
-            this.errors = [];
+            // this.errors = [];
             commentsService.getComments(this.gradebookID)
                 .then(response => {
                     this.comments = response.data;               
