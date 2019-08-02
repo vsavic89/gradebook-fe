@@ -1,25 +1,25 @@
 <template>
-    <div>        
-        <h2>Add professor</h2>
-        <div>
+    <div class="container">
+        <h2>Add professor</h2>       
+        <div class="text-center border border-light p-5 m-5">
             <label for="first_name">First name: </label>
-            <input type="text" name="first_name" v-model="newProfessor.first_name"/>
+            <input class="m-4 form-control mb-2" type="text" name="first_name" v-model="newProfessor.first_name"/>
             <label for="last_name">Last name: </label>
-            <input type="text" name="first_name" v-model="newProfessor.last_name"/>
-            <div v-for="(image, index) in imageList" :key="index">
-                Image {{index+1}}: 
-                <input type="text" :name="'image-'+(index)" v-model="newProfessor.imageURLs[index]"/>    
-                <button @click="removeImage(index)" >Remove Image</button>            
-            </div>
-            <br>            
+            <input class="m-4 form-control mb-2" type="text" name="first_name" v-model="newProfessor.last_name"/>
+            <div class="md-form input-group mb-3" v-for="(image, index) in imageList" :key="index">  
+                <div class="input-group-append pl-3">
+                    <p class="m-2 ml-4 pl-3 mb-0">Image: {{index+1}}</p> 
+                    <input class="form-control mr-3 mt-3" type="text" :name="'image-'+(index)" v-model="newProfessor.imageURLs[index]"/> 
+                    <button class="h-30 btn btn-secondary" @click="removeImage(index)" >Remove Image</button>      
+                </div>      
+            </div>  
+            <br>
             <errors-handler 
                 :errors="showErrors"
-            />
-            <br>
-            <br>
-            <button @click="addImage">Add Image</button>
-            <button @click="addProfessor">Submit</button>
-            <button @click="cancel">Cancel</button>
+            /> 
+            <button class="btn btn-success m-2" @click="addImage">Add Image</button>
+            <button class="btn btn-primary m-2" @click="addProfessor">Submit</button>
+            <button class="btn btn-secondary m-2" @click="cancel">Cancel</button>
         </div>
     </div>
 </template>
@@ -91,6 +91,9 @@ export default {
         ...mapGetters({
             user: "getUser"
         })
+    },
+    created(){
+        this.addImage();
     }
 }
 </script>

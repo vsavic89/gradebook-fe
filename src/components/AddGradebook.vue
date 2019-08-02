@@ -1,21 +1,18 @@
 <template>
-    <div>
+    <div class="container">
         <h2>Create New Gradebook</h2>
-        <form method="POST" @submit.prevent="addGradebook">
-            <div class="form-group">
-                <label for="name">Gradebook name: </label>
-                <input minlength="2" type="text" name="name" v-model="newGradebook.name" /><br>
+        <div class="text-center border border-light p-5 m-5">
+                <label class="mb-2" for="name">Gradebook name: </label>
+                <input class="m-4 form-control mb-2" minlength="2" type="text" name="name" v-model="newGradebook.name" /><br>
                 <label for="selectProfessor">Select Professor: </label>
-                <select name="selectProfessor" v-model="newGradebook.professor_id">
+                <select class="browser-default custom-select m-4" name="selectProfessor" v-model="newGradebook.professor_id">
                     <option v-for="(professor, index) in professors" :key="index" :value="professor.id">
                         {{ professor.first_name + ' ' + professor.last_name }}
                     </option>
                 </select>
-                <br>
-                <button type="submit">Submit</button>
-            </div>
-        </form>
-        <button @click="cancel">Cancel</button>        
+                <button class="btn btn-primary m-2" @click="addGradebook">Submit</button>
+                <button class="btn btn-secondary" @click="cancel">Cancel</button>   
+        </div>     
         <errors-handler 
             :errors="showErrors"
         />

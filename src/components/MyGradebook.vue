@@ -4,64 +4,84 @@
             <h2 v-if="routeName==='my-gradebook'">My Gradebook</h2>
             <h2>Gradebook name: {{ gradebookItemsList[0].name }}</h2>
             <div v-if="user">
-                <button class="btn btn-danger" @click="deleteGradebook(gradebookID)">Delete Gradebook</button>
+                <button class="btn btn-danger m-4" @click="deleteGradebook(gradebookID)">Delete Gradebook</button>
                 <button class="btn btn-secondary" @click="editGradebook(gradebookID)">Edit Gradebook</button>
             </div>
-            <br><br>
+            <br>
             <div v-if="gradebookItemsList[0].first_name">
-                Professor: <strong>{{gradebookItemsList[0].first_name + ' ' + gradebookItemsList[0].last_name}}</strong>
+                <h4>Professor: <strong>{{gradebookItemsList[0].first_name + ' ' + gradebookItemsList[0].last_name}}</strong></h4>
             </div>
             <div v-else>
-                Professor not assigned for this gradebook.
-            </div>            
-            <div v-if="user">
-                <button @click="addStudents">Add Students</button>
-            </div>
-                <div>
-                <h3>Students list</h3>                
+                <h4>Professor not assigned for this gradebook.</h4>
+            </div> 
+            <br>           
+            <div>
+                <h3>Students<span v-if="user"><button class="btn btn-success" @click="addStudents">Add Students</button></span></h3>               
                 <div v-if="gradebookItemsList[0].studentFirstName">
-                    <table border="1" align="center">
-                        <tr>
-                            <th>Image</th>
-                            <th>First name</th>
-                            <th>Last name</th>
-                        </tr>                        
-                        <tr v-for="(student, index) in gradebookItemsList" :key="index">                       
-                            <td><img width="100" height="100" :src="student.studentImageURL"/></td>
-                            <td>{{ student.studentFirstName }}</td>
-                            <td>{{ student.studentLastName }}</td>                            
-                        </tr>                        
-                    </table> 
-                </div>
-                <div v-else>
-                    <p>No students to show.</p>
-                </div>               
+                <table border="1" width="100%">
+                    <tr>
+                        <th>Image</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                    </tr>                        
+                    <tr v-for="(student, index) in gradebookItemsList" :key="index">                       
+                        <td><img width="100" height="100" :src="student.studentImageURL"/></td>
+                        <td>{{ student.studentFirstName }}</td>
+                        <td>{{ student.studentLastName }}</td>                            
+                    </tr>                        
+                </table> 
+            </div>
+            <div v-else>
+                <p>No students to show.</p>
+            </div>               
             </div>        
             <div v-if="commentsList.length > 0">
-                <h3>Comments:</h3>                
-                <div v-for="(comment, index) in commentsList" :key="index">
-                    <div v-if="comment">                
-                        Author name: <h4>{{ comment.first_name + ' ' + comment.last_name }}</h4>
-                        Created at: <p>{{ diffForHumans(comment.created_at) }}</p>
-                        Content: <p>{{ comment.content }}</p>
-                        <div v-if="user && (user.id === comment.user_id)">
-                            <button class="btn btn-danger" @click="deleteComment(index)">Delete Comment</button>               
-                        </div> 
-                    </div>            
-                </div>                
+                <h3>Comments</h3>    
+                <table border="1" width="100%">
+                <tr>
+                    <th>Author name</th>
+                    <th>Created at</th>
+                    <th>Content</th>
+                    <th>Action</th>
+                </tr>            
+                <tr v-for="(comment, index) in commentsList" :key="index">               
+                    <td>{{ comment.first_name + ' ' + comment.last_name }}</td>
+                    <td>{{ diffForHumans(comment.created_at) }}</td>
+                    <td>{{ comment.content }}</td>
+                    <td v-if="user && (user.id === comment.user_id)">
+                        <button class="btn btn-danger" @click="deleteComment(index)">Delete Comment</button>               
+                    </td> 
+                    <td v-else>
+                        <p>Action not available</p>
+                    </td>         
+                </tr>
+                </table>                
             </div>
             <div v-if="user">
-                <label for="commentContent">Content: </label>
-                <textarea maxlength="1000" minlength="1" name="commentContent" v-model="newComment.content" />
-                <br>
-                <button class="btn btn-primary" @click="addComment">Add Comment</button>
+                <hr class="featurette-divider">
+                <table border="1" width="100%">
+                    <tr>
+                        <th>
+                            Comment
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                    <tr>
+                        <td width="100%">
+                            <textarea class="maxWidthTextArea" rows="5" maxlength="1000" minlength="1" name="commentContent" v-model="newComment.content" />
+                        </td>
+                        <td><button class="btn btn-primary" @click="addComment">Add Comment</button></td>
+                    </tr>
+                </table>
             </div>
         </div>    
         <div v-else>
             <p>No gradebook to show.</p>            
         </div>
         <errors-handler 
-                :errors="showErrors"
+            :errors="showErrors"
         />
     </div>
 </template>
@@ -201,5 +221,7 @@ export default {
 </script>
 
 <style>
-
+.maxWidthTextArea{
+    width: 100%;
+}
 </style>

@@ -3,13 +3,13 @@
         <div v-if="!user">
         <form class="text-center border border-light p-5" method="POST" @submit.prevent="register">            
             <p class="h4 mb-4">Sign up</p>
-            <input maxlength="255" class="form-control mb-4" placeholder="First Name" type="text" name="first_name" v-model="user.first_name" required/>        
-            <input maxlength="255" class="form-control mb-4" placeholder="Last Name" type="text" name="last_name" v-model="user.last_name" required/>            
-            <input maxlength="255" class="form-control mb-4" placeholder="E-mail" type="email" name="email" v-model="user.email" required/>            
-            <input minlength="8" class="form-control mb-4" placeholder="Password" type="password" name="password" v-model="user.password" required/>                                    
-            <input minlength="8" class="form-control mb-4" placeholder="Confirm Password" type="password" name="password_confirmation" v-model="user.password_confirmation" required/>        
+            <input maxlength="255" class="form-control mb-4" placeholder="First Name" type="text" name="first_name" v-model="newUser.first_name" required/>        
+            <input maxlength="255" class="form-control mb-4" placeholder="Last Name" type="text" name="last_name" v-model="newUser.last_name" required/>            
+            <input maxlength="255" class="form-control mb-4" placeholder="E-mail" type="email" name="email" v-model="newUser.email" required/>            
+            <input minlength="8" class="form-control mb-4" placeholder="Password" type="password" name="password" v-model="newUser.password" required/>                                    
+            <input minlength="8" class="form-control mb-4" placeholder="Confirm Password" type="password" name="password_confirmation" v-model="newUser.password_confirmation" required/>        
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="termsAndConditions" name="termsAndConditions" v-model="user.accept_terms_and_conditions" required>
+                <input type="checkbox" class="custom-control-input" id="termsAndConditions" name="termsAndConditions" v-model="newUser.accept_terms_and_conditions" required>
                 <label class="custom-control-label" for="termsAndConditions">I accept terms and conditions</label>
             </div>
             <button class="btn btn-info btn-block my-4" type="submit">Register</button>                        
@@ -34,7 +34,7 @@ export default {
     },
     data(){
         return {
-            user: {
+            newUser: {
                 first_name: '',
                 last_name: '',
                 email: '',
@@ -48,7 +48,7 @@ export default {
     methods: {
         register(){
             this.errors = [];            
-            authService.register(this.user)
+            authService.register(this.newUser)
             .then(response => {
                 var r = confirm(response.data['success'] + '\nProceed on login page?');
                 if (r==true)

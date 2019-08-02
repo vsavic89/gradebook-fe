@@ -1,15 +1,21 @@
 <template>
-    <div>
+    <div class="container">
         <div v-if="user">
             <h2>Professor info</h2>
-            <div v-if="professor.length > 0">
-                <ul>
-                    <li><img width="100" height="100" :src="professor[0].imageUrl"/></li>
-                    <li>Fullname: {{ professor[0].first_name + ' ' + professor[0].last_name }}</li>  
-                    <li v-if="professor[0].gradebook_name">Gradebook name: {{ professor[0].gradebook_name }}</li>          
-                    <li v-else>Gradebook name: undefined</li>
-                    <li>Number of students: {{ numberOfStudents }}</li>
-                </ul>
+            <div v-if="professor.length > 0" class="text-center border border-light p-5 m-5">
+                <table border="1" width="100%">
+                    <tr>
+                        <th>Picture</th>
+                        <th>Fullname</th>
+                        <th>Gradebook name</th>
+                        <th>Number of students</th>
+                    </tr>
+                    <td><img width="100" height="100" :src="professor[0].imageUrl"/></td>
+                    <td>{{ professor[0].first_name + ' ' + professor[0].last_name }}</td>  
+                    <td v-if="professor[0].gradebook_name"><button class="btn btn-primary" @click="goToGradebook(professor[0].id)">{{ professor[0].gradebook_name }}</button></td>          
+                    <td v-else>undefined</td>
+                    <td>{{ numberOfStudents }}</td>
+                </table>
                 <errors-handler 
                     :errors="showErrors"
                 />
@@ -50,6 +56,11 @@ export default {
                     vm.errors.push(e)
                 })     
         })
+    },
+    methods: {
+        goToGradebook(id){
+            return this.$router.push('/gradebooks/'+id);
+        }
     },
     computed: {
         showErrors(){

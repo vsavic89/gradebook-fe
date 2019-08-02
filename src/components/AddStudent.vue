@@ -1,30 +1,37 @@
 <template>
   <div>
     <h2>Add Student</h2>
-    <div v-for="(student, index) in allNewStudents" :key="index" class="form-group"> 
-      <h4>Student: {{ index+1 }}  </h4>           
-      <label for="first_name">First name: </label>
-      <input type="text" :id="index" name="first_name" @keyup="firstNameChange" :value="student.first_name" required/><br>
-      <label for="last_name">Last name: </label>
-      <input type="text" :id="index" name="last_name" @keyup="lastNameChange" :value="student.last_name" required/><br>
-      <label for="imageURL">Image: </label>
-      <input type="text" :id="index" name="imageURL" @keyup="imageURLChange" :value="student.imageURL" required/><br>        
-      <div v-if="isEditPage">      
-        <button class="btn btn-secondary" @click="editStudent(index)">Edit Student</button>      
-      </div>
-      <div v-if="(!isEditPage && !student.id) || (isEditPage)">
-          <button class="btn btn-danger" @click="removeStudent(index)">Remove Student</button>      
-      </div>
+    <div>
+      <button class="btn btn-success" @click="addNewFields">Add New Student</button> <br><br>
+      <table border="1" width="100%">
+        <tr>
+          <th>Student no.</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Image URL</th>
+          <th>Actions</th>
+        </tr>
+        <tr v-for="(student, index) in allNewStudents" :key="index" class="form-group">
+        <td>{{ index+1 }}  </td>           
+        <td><input class="form-control mb-4" type="text" :id="index" name="first_name" @keyup="firstNameChange" :value="student.first_name" required/></td>
+        <td><input class="form-control mb-4" type="text" :id="index" name="last_name" @keyup="lastNameChange" :value="student.last_name" required/></td>
+        <td><input class="form-control mb-4" type="text" :id="index" name="imageURL" @keyup="imageURLChange" :value="student.imageURL" required/></td>    
+        <td><span class="m-4" v-if="isEditPage">      
+          <button class="btn btn-secondary" @click="editStudent(index)">Edit Student</button>      
+        </span>
+        <span v-if="(!isEditPage && !student.id) || (isEditPage)">
+            <button class="btn btn-danger" @click="removeStudent(index)">Remove Student</button>      
+        </span>
+        </td>
+        </tr>
+      </table>
+      <br><br>
+      <button class="btn btn-primary m-2" @click="addStudents">Submit New Students</button> 
+      <button class="btn btn-light" @click="cancel">Cancel</button>            
+      <errors-handler 
+        :errors="showErrors"
+      />
     </div>
-    <button class="btn btn-success" @click="addNewFields">Add New Student</button>
-    <button class="btn btn-light" @click="cancel">Cancel</button>    
-    <br><br>
-    <div v-if="allNewStudents.length > 0">
-      <button class="btn btn-primary" @click="addStudents">Submit New Students</button>    
-    </div>          
-    <errors-handler 
-      :errors="showErrors"
-    />
   </div>
 </template>
 

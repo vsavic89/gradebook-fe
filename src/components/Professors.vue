@@ -5,7 +5,7 @@
             <label for="filter">Find professors by fullname: </label>
             <input type="text" name="filter" v-model="searchTerm" placeholder="(type here)"/>        
             <div v-if="filteredProfessors.length > 0">    
-            <table border="1" align="center">
+            <table border="1" width="100%">
                 <tr>
                     <th>Picture</th>
                     <th>Fullname</th>
@@ -21,7 +21,7 @@
                     <td v-else>
                         <p>Professor is available</p>
                     </td>  
-                    <td><button @click="showProfessor(professor.id)">Show</button></td>
+                    <td><button class="btn btn-primary" @click="showProfessor(professor.id)">Show</button></td>
                 </tr>
             </table>
             </div>
