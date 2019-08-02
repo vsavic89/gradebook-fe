@@ -7,14 +7,14 @@
             <label for="last_name">Last name: </label>
             <input type="text" name="first_name" v-model="newProfessor.last_name"/>
             <div v-for="(image, index) in imageList" :key="index">
-                Image {{index}}: 
+                Image {{index+1}}: 
                 <input type="text" :name="'image-'+(index)" v-model="newProfessor.imageURLs[index]"/>    
                 <button @click="removeImage(index)" >Remove Image</button>            
             </div>
             <br>            
-            <div v-for="error in showErrors" :key="error">
-               Error: {{error}}<br>      
-            </div> 
+            <errors-handler 
+                :errors="showErrors"
+            />
             <br>
             <br>
             <button @click="addImage">Add Image</button>
@@ -26,8 +26,12 @@
 
 <script>
 import { professorsService } from '../services/professors.service';
+import ErrorsHandler from './ErrorsHandler';
 import { mapGetters } from "vuex";
 export default {
+    components: {
+      ErrorsHandler
+    },
     data(){
         return {
             newProfessor: {
@@ -47,9 +51,13 @@ export default {
                     let s = this.newProfessor.imageURLs[i].substr(this.newProfessor.imageURLs[i].length-4);
                     let ss = this.newProfessor.imageURLs[i].substr(this.newProfessor.imageURLs[i].length-5);
                     if (!(((s.includes('.jpg')) || s.includes('.png')) || (ss.includes('.jpeg'))))                
-                    this.errors.push('Image '+ i + ': ' + this.newProfessor.imageURLs[i] + ' is not valid image url.');                
-                }            
-                if (this.errors.length <= 0){    
+                    this.errors.push({message: 'Image '+ (i+1) + ': ' + this.newProfessor.imageURLs[i] + ' is not valid image url.'});                
+                }    
+                if(this.newProfessor.first_name === '')
+                    this.errors.push({message: 'First name can not be empty'})        
+                if(this.newProfessor.last_name === '')
+                    this.errors.push({message: 'Last name can not be empty'})            
+                if (this.errors.length === 0){    
                     this.newProfessor.user_id = this.user.id;             
                     professorsService.addProfessor(this.newProfessor)
                             .then(response => {                                                        
@@ -59,7 +67,7 @@ export default {
                             })
                 }
             }else{
-                return this.errors.push('Please add image.');
+                return this.errors.push({message: 'Please add image.'});
             }
         },
         addImage(){            

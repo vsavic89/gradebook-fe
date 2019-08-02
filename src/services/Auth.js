@@ -2,8 +2,7 @@ import axios from 'axios'
 
 export default class AuthService {
   constructor() {
-    this.setAxiosDefaultAuthorizationHeader();
-    // axios.defaults.baseURL = 'http://localhost:8000/api'
+    this.setAxiosDefaultAuthorizationHeader();    
   }
   login(email, password) {
     return axios.post('/login', {
@@ -11,10 +10,8 @@ export default class AuthService {
     }).then(({data}) => {
       window.localStorage.setItem('loginToken', data.token)
       window.localStorage.setItem('user', JSON.stringify(data.user))
-      this.setAxiosDefaultAuthorizationHeader()
+      this.setAxiosDefaultAuthorizationHeader()      
       return data.user;
-    }).catch(e => {
-        console.log(e)
     })
   }
 

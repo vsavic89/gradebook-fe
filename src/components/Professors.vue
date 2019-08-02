@@ -27,17 +27,19 @@
         <div v-else>            
             <h3>Sorry, no professors to show, please add one.</h3>
         </div>
-        <div v-if="errors.length > 0">
-            <p v-for="(error, index) in errors" :key="index">
-                {{ error }}
-            </p>
-        </div>
+        <errors-handler 
+            :errors="showErrors"
+        />
     </div>
 </template>
 
 <script>
 import { professorsService } from '../services/professors.service';
+import ErrorsHandler from './ErrorsHandler';
 export default {
+    components: {
+      ErrorsHandler
+    },
     data(){
         return {
             professors: [],
@@ -52,15 +54,21 @@ export default {
                 ||
                 professor.last_name.toLowerCase().includes(this.searchTerm.toLowerCase())
             )
-        }
+        },
+        showErrors(){
+            return this.errors;
+        },
     },
-    created(){
-        professorsService.getAll()
-            .then(response => {
-                this.professors = response.data;
-            }).catch(e => {
-                this.errors.push(e)
-            })
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.errors = [];
+            professorsService.getAll()
+                .then(response => {
+                    vm.professors = response.data;
+                }).catch(e => {
+                    vm.errors.push(e)
+                })  
+        })
     },
     methods: {
         showProfessor(id){

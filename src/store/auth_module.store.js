@@ -18,9 +18,6 @@ export const AuthModule = {
                 .then((user) => {
                     context.commit('setUser', user);
                 })
-                .catch((error) => {
-                    console.log(error); //eslint-disable-line
-                });
         },
         logout(context){
             context.commit('setUser', null)            

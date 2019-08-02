@@ -9,18 +9,26 @@
                 </div>                    
             </div>
             <button class="btn btn-info btn-block my-4" type="submit">Log In</button>
-        </form>      
+        </form> 
+         <errors-handler 
+            :errors="showErrors"
+        />
     </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
 import { authService } from '../services/Auth';
+import ErrorsHandler from './ErrorsHandler';
 export default {
+    components: {
+        ErrorsHandler
+    },
     data(){
         return {
                 email: '',
-                password: ''
+                password: '',
+                errors: []
         }
     },
     methods: {
@@ -28,15 +36,28 @@ export default {
         login: 'login'
       }),
         submitForm(){
+            this.errors = []; 
             this.login(
             {
                 email: this.email,
                 password: this.password
-            }).then(() => {
+            }).then(() => {                                              
                 this.$router.push('/')
-            })           
+            }).catch(e => {                                
+                this.errors.push(e.response.data);
+            })
+        }
+    },
+    computed: {
+        showErrors(){
+            return this.errors;
         }
     }
+//     beforeRouteEnter(to, from, next) {
+//         next(vm => {
+//         vm.prevRoute = from      
+//         })
+//     }
 }
 </script>
 

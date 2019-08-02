@@ -22,18 +22,20 @@
     <div v-if="allNewStudents.length > 0">
       <button class="btn btn-primary" @click="addStudents">Submit New Students</button>    
     </div>          
-    <div v-if="errors.length > 0">
-        <p v-for="(error, index) in errors" :key="index">
-            {{ error }}
-        </p>
-    </div>
+    <errors-handler 
+      :errors="showErrors"
+    />
   </div>
 </template>
 
 <script>
 import { studentsService } from "../services/students.service";
+import ErrorsHandler from './ErrorsHandler';
 export default {
-  data() {
+  components: {
+      ErrorsHandler
+  },
+  data() {    
     return {
         students: [],        
         newStudent: {
@@ -53,21 +55,23 @@ export default {
   methods: {
     addStudents(){            
         this.errors = [];
-        for(let i=0; i < this.students.length; i++){
+        for(var i=0; i < this.students.length; i++){
           if (this.students[i].imageURL !== ''){
               let s = this.students[i].imageURL.substr(this.students[i].imageURL.length-4);
               let ss = this.students[i].imageURL.substr(this.students[i].imageURL.length-5);
               if (!(((s.includes('.jpg')) || s.includes('.png')) || (ss.includes('.jpeg'))))                
-                this.errors.push('Image : ' + this.students[i].imageURL + ' is not valid image url.');                           
+                this.errors.push({message: 'Image : ' + this.students[i].imageURL + ' is not valid image url.'});    
+          }else{
+            return this.errors.push({message: 'Please add image for student number: ' + (i+1)});
           }
           if(this.students[i].first_name === '')
-            this.errors.push('First name for student ' + (i+1) + ' must be filled!');
+            this.errors.push({message: 'First name for student ' + (i+1) + ' must be filled!'});
           if(this.students[i].last_name === '')
-            this.errors.push('Last name for student ' + (i+1) + ' must be filled!');  
+            this.errors.push({message: 'Last name for student ' + (i+1) + ' must be filled!'});  
            if(this.students[i].imageURL === '')
-            this.errors.push('Image URL for student ' + (i+1) + ' must be filled!');          
+            this.errors.push({message: 'Image URL for student ' + (i+1) + ' must be filled!'});          
         }
-        if (this.errors.length <= 0){        
+        if (this.errors.length === 0){            
           let newStudents = this.students.filter(student => student.id === undefined)                                
           if(newStudents.length > 0){                             
             studentsService.addStudents(newStudents)
@@ -77,10 +81,8 @@ export default {
                   this.errors.push(e);
               })            
           }else{
-            this.errors.push('No new students to add.');
+            this.errors.push({message: 'No new students to add.'});
           }
-        }else{
-            return this.errors.push('Please add image for student number: ' + (i+1));
         }
     },
     cancel(){
@@ -96,15 +98,17 @@ export default {
       }
     },
     addNewFields(){
+      this.errors = [];
       if(this.numberOfStudents < 35 ){
         this.getDefaults();
         this.students.push(this.newStudent);                 
         this.numberOfStudents++;
       }else{
-        this.errors.push('Max number of students reached. Can not add fields')
+        this.errors.push({message: 'Max number of students reached. Can not add fields'})
       }
     },
     removeStudent(index){ 
+      this.errors = [];
       let studentID = this.students[index].id;     
       if(studentID){
         studentsService.deleteStudent(studentID)
@@ -118,6 +122,7 @@ export default {
       }
     },
    editStudent(index){
+     this.errors = [];
      let studentID = this.students[index].id;     
       if(studentID){
         studentsService.editStudent(this.students[index])
@@ -147,27 +152,29 @@ export default {
   computed: {
     allNewStudents(){
       return this.students;
+    },
+    showErrors(){
+      return this.errors;
     }
   },
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.prevRoute = from      
-    })
-  },
-  created(){ 
-    this.isEditPage = this.$router.currentRoute.name.includes('edit');    
-    this.gradebookID = this.$router.currentRoute.params.id;      
-    this.students.gradebook_id = this.gradebookID;
-    studentsService.getStudents(this.gradebookID)
-      .then(response => {
-        this.students = response.data;        
-        this.numberOfStudents = this.students.length;         
-        this.addNewFields();                    
-      }).catch(e => {
-        this.errors.push(e);
+      vm.errors = [];
+      vm.prevRoute = from;      
+      vm.isEditPage = to.name.includes('edit');    
+      vm.gradebookID = to.params.id;      
+      vm.students.gradebook_id = vm.gradebookID;
+      studentsService.getStudents(vm.gradebookID)
+        .then(response => {
+          vm.students = response.data;        
+          vm.numberOfStudents = vm.students.length;         
+          vm.addNewFields();                    
+        }).catch(e => {
+          vm.errors.push(e);
+        })
       })
-  }
+  },
 };
 </script>
 

@@ -37,18 +37,20 @@
         <div v-else>
             <h4>Sorry, no gradebooks to show, please add one.</h4>
         </div>
-        <div v-if="errors.length > 0">
-            <p v-for="(error, index) in errors" :key="index">
-                {{ error }}
-            </p>
-        </div>
+        <errors-handler 
+                :errors="showErrors"
+        />
     </div>
 </template>
 
 <script>
 import { gradebooksService } from '../services/gradebooks.service';
 import { mapGetters } from "vuex";
+import ErrorsHandler from './ErrorsHandler';
 export default {
+    components: {
+      ErrorsHandler
+    },
     data(){
         return {
             gradebooks: [],
@@ -59,8 +61,10 @@ export default {
             totalPages: undefined
         }
     },
-    created(){
-        this.getGradebooks();
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.getGradebooks();
+        })
     },
     computed: {
         ...mapGetters({
@@ -82,6 +86,7 @@ export default {
     },
     methods: {
         getGradebooks(){
+            this.errors = [];
             this.currentPage++;
             gradebooksService.getAll(this.currentPage, this.rowsPerPage)
                 .then(response => {

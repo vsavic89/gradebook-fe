@@ -36,8 +36,12 @@
             <div v-if="!user">                             
                 <router-link class="nav-link btn btn-outline-primary my-2 my-sm-0 mr-sm-2" to="/login">Login</router-link>                                  
             </div>
-            <div v-else>                
-                <router-link class="nav-link btn btn-outline-success my-2 my-sm-0" to="/logout" @click="logoutUser()"><a class="underline-remove" @click="logoutUser()">Logout</a></router-link>
+            <div v-else>  
+                <a href="#" @click="logoutUser" class="underline-remove">              
+                <router-link class="nav-link btn btn-outline-success my-2 my-sm-0" to="/logout">                  
+                    Logout                    
+                </router-link>
+                </a>
             </div>
           <div v-if="!user">
               <router-link class="nav-link btn btn-outline-danger my-2 my-sm-0" to="/register">Register</router-link>
@@ -88,7 +92,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-a.underline-remove {
+a:hover.underline-remove {   
     text-decoration: none;
 }
 ul {

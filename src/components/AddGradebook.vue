@@ -15,21 +15,21 @@
                 <button type="submit">Submit</button>
             </div>
         </form>
-        <button @click="cancel">Cancel</button>
-
-        <div v-if="errors.length > 0">
-            <p v-for="(error, index) in errors" :key="index">
-                {{ error }}
-            </p>
-        </div>
-
+        <button @click="cancel">Cancel</button>        
+        <errors-handler 
+            :errors="showErrors"
+        />
     </div>
 </template>
 
 <script>
 import { gradebooksService } from '../services/gradebooks.service';
 import { professorsService } from '../services/professors.service';
+import ErrorsHandler from './ErrorsHandler';
 export default {
+    components: {
+      ErrorsHandler
+    },
     data(){
         return {
             newGradebook: {
@@ -44,22 +44,35 @@ export default {
         cancel(){
             this.$router.push('/gradebooks');
         },
-        addGradebook(){            
-            gradebooksService.add(this.newGradebook)
-                .then(response => {
-                    this.$router.push('/gradebooks')
-                }).catch(e => {
-                    this.errors.push(e);
-                })
+        addGradebook(){ 
+            this.errors = [];        
+            if(this.newGradebook.name !== ''){   
+                gradebooksService.add(this.newGradebook)
+                    .then(response => {
+                        this.$router.push('/gradebooks')
+                    }).catch(e => {
+                        this.errors.push(e);
+                    })
+            }else{
+                this.errors.push({message: 'Gradebook name is not filled!'})
+            }
         },
     },
-    created(){
-        professorsService.getAll('onlyUnsignedProfessor')
+    beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.errors = [];
+      professorsService.getAll('onlyUnsignedProfessor')
         .then(response => {
-            this.professors = response.data;
+            vm.professors = response.data;
         }).catch(e => {
-            this.errors.push(e);
-        })
+            vm.errors.push(e);
+        })      
+      })
+    },
+    computed: {
+        showErrors(){
+            return this.errors;
+        }
     }
 }
 </script>

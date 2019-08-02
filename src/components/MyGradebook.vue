@@ -48,23 +48,21 @@
                             <button class="btn btn-danger" @click="deleteComment(index)">Delete Comment</button>               
                         </div> 
                     </div>            
-                </div>
-                <div v-if="user">
-                    <label for="commentContent">Content: </label>
-                    <textarea maxlength="1000" minlength="1" name="commentContent" v-model="newComment.content" />
-                    <br>
-                    <button class="btn btn-primary" @click="addComment">Add Comment</button>
-                </div>
+                </div>                
+            </div>
+            <div v-if="user">
+                <label for="commentContent">Content: </label>
+                <textarea maxlength="1000" minlength="1" name="commentContent" v-model="newComment.content" />
+                <br>
+                <button class="btn btn-primary" @click="addComment">Add Comment</button>
             </div>
         </div>    
         <div v-else>
             <p>No gradebook to show.</p>            
         </div>
-        <div v-if="errors.length > 0">
-            <p v-for="(error, index) in errors" :key="index">
-                {{ error }}
-            </p>
-        </div>
+        <errors-handler 
+                :errors="showErrors"
+        />
     </div>
 </template>
 
@@ -72,7 +70,11 @@
 import { gradebooksService } from '../services/gradebooks.service';
 import { commentsService } from '../services/comments.service';
 import { mapGetters } from "vuex";
+import ErrorsHandler from './ErrorsHandler';
 export default {
+    components: {
+      ErrorsHandler
+    },
     data(){
         return{
             gradebookID: undefined,
@@ -89,27 +91,31 @@ export default {
             routeName: null           
         }
     },
-    created(){  
-        this.routeName = this.$router.currentRoute.name;      
-        if (this.routeName === 'my-gradebook'){
-            gradebooksService.getGradebookByProfessorID(this.user.id)
-                .then(response => {
-                    this.gradebook = response.data;
-                    this.gradebookID = this.gradebook[0].id;
-                    this.getComments();                      
-                }).catch(e => {
-                    this.errors.push(e);
-                })
-        }else{
-            this.gradebookID = this.$router.currentRoute.params.id;
-            gradebooksService.getGradebook(this.gradebookID)
-                .then(response => {
-                    this.gradebook = response.data;                 
-                    this.getComments(); 
-                }).catch(e => {
-                    this.errors.push(e);
-                })
-        }           
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.routeName = to.name;      
+            if (vm.routeName === 'my-gradebook'){            
+                gradebooksService.getGradebookByProfessorID(vm.user.id)
+                    .then(response => {
+                        vm.gradebook = response.data;
+                        if (vm.gradebook.length > 0){
+                            vm.gradebookID = vm.gradebook[0].id;
+                            vm.getComments();                      
+                        }
+                    }).catch(e => {
+                        vm.errors.push(e);
+                    })
+            }else{
+                vm.gradebookID = to.params.id;
+                gradebooksService.getGradebook(vm.gradebookID)
+                    .then(response => {
+                        vm.gradebook = response.data;                 
+                        vm.getComments(); 
+                    }).catch(e => {
+                        vm.errors.push(e);
+                    })
+            }      
+        })
     },
     computed: {
         ...mapGetters({
@@ -120,10 +126,14 @@ export default {
         },
         commentsList(){
             return this.comments;
-        }
+        },
+        showErrors(){
+            return this.errors;
+        },
     },
     methods: {
         getComments(){
+            this.errors = [];
             commentsService.getComments(this.gradebookID)
                 .then(response => {
                     this.comments = response.data;               
@@ -140,6 +150,7 @@ export default {
             return this.$router.push('/gradebooks/'+this.gradebook[0].id+'/students/create');
         },
         addComment(){
+            this.errors = [];
             this.newComment.user_id = this.user.id;
             this.newComment.gradebook_id = this.gradebookID;            
             commentsService.addComment(this.newComment)
@@ -157,11 +168,12 @@ export default {
             return this.$router.push('/gradebooks/'+id+'/edit');
         },
         deleteComment(index){
+            this.errors = [];
             let id = this.comments[index].id;
             var r = confirm("Are you sure?");
             if (r == true) {
                 commentsService.deleteComment(id)
-                    .then(response => {
+                    .then(() => {
                         this.comments.splice(index, 1);
                     }).catch(e => {
                         this.errors.push(e);
@@ -169,10 +181,11 @@ export default {
             }        
         },
         deleteGradebook(id){
+            this.errors = [];
             var r = confirm("Are you sure?");
             if (r == true) {
                 gradebooksService.deleteGradebook(id)
-                    .then(response => {
+                    .then(() => {
                         this.$router.push('/gradebooks');
                     }).catch(e => {
                         this.errors.push(e);
